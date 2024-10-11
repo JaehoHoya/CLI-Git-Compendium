@@ -40,4 +40,69 @@ python
 >> import torch
 >> torch.__version__
 >> 쉘 나가기 exit()
->> jupyter notebook 실행 
+>> jupyter notebook 실행
+
+
+
+
+
+
+LM (Large Language Model )
+
+Llama 3 (meta Ai 사에서 배포 )
+Huggingface.co
+GGUF   포멧  
+
+Llama 3+ Korean 
+LLM  +서버+ 웹 
+LLM  +Python 
+서버: LM  studio 가 제공하는 웹서버 ,
+		Ollama( 로컬에서 LLM을 쉽게 사용할 수 있게 해주는 도구 ,서버제공
+
+requests 파이썬 : 웹서버에 접속할 수 있는 모듈 
+
+LLM+ 서버 + 스프링 웹 
+
+LS 스트듀오를 통해서 쉽게 언어모델 다운로드하기 
+
+
+
+
+
+Prompt Engineering 
+- 언어 모델에 대해서 어떻게 질의에 대해서 구조화할까”?
+
+
+Zero-shot , one -shot , Few -shot  
+
+Chain of Thoughts :
+Context Prompting :
+
+Ollama : 언어모델 로컬에서 실행, 서버 11434 실행 
+-다운로드 실행 
+-import ollama 
+
+-cLI 명령어도 사용가능 
+
+
+ Modelfile 이라는 파일에 모델이 위치한 경로를 등록해야한다 
+
+FROM C:/Users/SKU202-0.cache/lm-studio/models/MLP-KTLim/llama-3-Korean-Bllossom-8B-gguf-Q4_K_M/llama-3-Korean-Bllossom-8B-Q4_K_M.gguf
+
+
+Ollama list 
+
+
+ touch Modelfile 확장자 없는 파일 생성 
+실행
+ollama run llama-3-Korean-Bllossom-8B-Q4_K_M.gguf
+
+생성
+ollama create llama-3-Korean-Bllossom-8B-Q4_K_M.gguf -f Modelfile
+
+
+http://localhost:11434
+
+Ollama run … : 콘솔에서 모델과 대화 가능
+Ollama serve: 서버만 실행됨 ,콘솔 대화 불가 
+
