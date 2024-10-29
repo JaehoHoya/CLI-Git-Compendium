@@ -1,3 +1,9 @@
+# 라마 3 다운  및 테스트 
+텍스트 파일 에 FROM 라마 파일 위치 (c://asdasd)
+ollama create llama-3-Korean-Bllossom-8B-Q4_K_M.gguf -f Modelfile
+0llama run llama-3-Korean-Bllossom-8B-Q4_K_M.gguf
+
+
 # CLI-Git-Compendium
 자주 사용한 cmd 명령어 모음 &amp; git 
 
