@@ -1,3 +1,8 @@
+zip -d <jar file name>.jar META-INF/*.RSA META-INF/*.DSA META-INF/*.SF
+
+--------
+
+
 Spring Boot에서 Python 서버(FastAPI)에서 제공하는 값을 가져오려면, Spring Boot에서 HTTP 클라이언트를 사용해 Python 서버에 요청을 보내면 됩니다. Spring에서는 RestTemplate이나 WebClient를 사용하여 HTTP 요청을 보낼 수 있습니다.
 
 아래는 Spring Boot에서 RestTemplate을 사용하여 Python 서버의 데이터를 가져오는 방법입니다.
