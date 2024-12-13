@@ -1,0 +1,64 @@
+docker-work 디렉토리 생성
+ - dockerfile 생성
+ - 프로젝트 jar 파일
+ - 부수적인 파일/디렉토리
+
+Docker DeskTop 실행
+
+Docker 이미지 생성
+ - docker-work 디렉토리에서 CMD 명령
+ - docker build -t spring-web:1.0 .  <- 현재 디렉토리에 있는 파일을 사용하여 docker 이미지 생성
+ - docker images    <- docker 이미지 생성 확인
+
+Docker 컨테이너에서 위에서 생성한 이미지 실행
+ - docker run -d -p 80:80 spring-web:1.0     <- 컨테이너 이름 없이 이미지 실행
+ - docker run -d -p 80:80 --name spring-web-container spring-web:1.0    <- 컨테이너 이름을 지정하여 이미지 실행
+
+이미지를 배포하기 전에 Tagging
+ - docker tag <이용자 ID>/<이미지 이름>:<태그>
+ - docker tag cwisky/spring-web:1.0
+
+이미지에 태그가 적용되었는지 확인
+ - docker images
+
+docker hub에 업로드
+ - docker login -u cwiskykim@gmail.com<enter>
+ - Password: .......<enter>
+ - Succeeded
+ - docker push cwisky/spring-web:1.0<enter>
+
+docker hub에 업로드 후 public/private 지정하기
+ - private 횟수에 제한이 있음
+ - 필요시 public<->private
+ - View in Hub > repositories > 해당 이미지 선택 > Settings > public이나 private 설정변경, 삭제도 가능
+
+AWS EC2 인스턴스에 docker 설치하기
+ - PuTTY를 통해 AWS EC2 인스턴스에 접속
+ - sudo apt install -y ca-certificates curl gnupg
+ - sudo install -m 0755 -d /etc/apt/keyrings
+ - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+ - sudo chmod a+r /etc/apt/keyrings/docker.gpg
+ - echo \ "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+ $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+ - sudo apt update -y
+ - sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+ - sudo systemctl start docker
+ - sudo systemctl enable docker
+ - sudo usermod -aG docker $(whoami)
+ - SSH 접속을 끊고 다시 접속해야 sudo 없이 docker작업이 가능함
+
+Docker hub에 로그인하여 도커이미지를 다운로드하고 컨테이너에서 실행한다
+ - docker login -u cwiskykim@gmail.com
+ - Password : 
+ - Succeeded
+ - docker pull cwisky/spring-web:1.3
+ - docker images
+ - docker run -d -p 80:80 cwisky/spring-web:1.3
+ - http://PUBLIC_IP/
+ - 정적 이미지 요청 : http://PUBLIC_IP/test.jpg
+
+컨테이너 파일 시스템과 호스트 시스템을 Volume으로 동기화
+ - docker run -d -p 80:80 -v $(pwd)/upload:/app/upload --name volume-spring-web-container cwisky/spring-web:1.3
+ - docker start volume-spring-web-container   : 이미 컨테이너가 생성된 경우에는 이런 방식으로 실행
+ - docker stop vojume-spring-web-container
+
