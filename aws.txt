@@ -1,0 +1,121 @@
+1.vpc 생성 -10.0.0.0/16 DNS 호스트 이름 활성화
+
+2.인터넷 게이트 웨이 생성 ->vpc(사설망)에 연결 
+
+3.서브넷 생성 -사설망 연결 IPv4 서브넷 CIDR 블록: vpc 범위내에 들어와라
+10.0.1.0/24
+
+4.라우팅 테이블 생성
+라우팅  대상/대상 :  목적지가 외부 내부 필요  기본 local 
+목적지가 외부로 나가려면 인터넷 게이트웨이를 지나야함 
+ 라우팅 편집 
+ 라우팅 추가  목적지가 : 0.0.0.0/0 외부로 나가는 트래픽 
+
+인터넷 게이트웨이 - vpc 설정  서브넷 연결 편집 연결 
+5.rds 검색 -데이터 베이스 -생성  .........-개발테스트
+자격 증명 관리-자체관리 , vpc 설정
+DB 서브넷 그룹-퍼블릭 액세스(예:외부 접근가능)
+ 보안그룹 새로 생성 : jaeho-oracle-SG  or defalt 
+오류
+
+5-1 서브넷 하나 더 생성 
+ jaeho-public-subnet-02      10.0.2.0/24
+ 2b
+
+
+https://www.oracle.com/kr/database/technologies/appdev/jdbc-downloads.html
+-prot : 1521
+-host : jaeho-oracle.czs26u2mq6r9.eu-west-2.rds.amazonaws.com
+-sid : DB 이름
+ORCL(구성 버튼) 
+<오류> 발생시 
+vpc 보안그륩  
+인바운드 규칙 -인바운드 규칙 편집
+사용자 지정 x -> anyWhere Ip4
+
+위에서 서브넷 하나 더 생성햇잖아 라우팅 테이블에또 넣어줘야지
+
+6 프로젝트 aws 오라클 연결 
+
+-------------------------------------------------------------------------
+
+AWS EC2 
+-Ubuntu
+-c6i.2xlarge (cpu) 
+-AMI: Anaconda, Tensorflow ,......
+-Jupyter notebook  설정 : 암호 설정 ,포트(8888)
+
+Ubuntu Tensorflow 
+인스턴스 유형 : c6i.2xlarge (cpu) 
+
+
+
+------------------------------------------------------------------------
+
+인스턴스 생성 과정 
+1.tensorflow 검색  ubuntu  선택 
+퍼블릭 IPv4 주소랑 ppk 로 푸티  실행 ㅇㅇ 
+2.스토리지 50
+ ubuntu 로그인 
+ python3 --version
+ python3 실행 >>>print 문 찍어보기 
+ 3,import tensorflow as tf
+4.tf.__version__
+파이썬 나가기 exit()
+
+주피터 노트북 설정하기 
+5. source activate python3
+6 (tensorflow) ubuntu@ip-10-0-1-94:~$ 바뀜 
+7.jupyter notebook --generate-config
+8.jupyter notebook password  ->>> 이거 8888로 함
+
+9.nano ~/.jupyter/jupyter_notebook_config.py
+10.
+
+c.NotebookApp.ip = '0.0.0.0'
+c.NotebookApp.port = 8888
+c.NotebookApp.open_browser = False
+c.NotebookApp.allow_remote_access = True
+c.NotebookApp.notebook_dir = '/home/ubuntu'
+(복사는 우측클릭 하면 알아서 되네 
+
+11. 주피터 노트북 
+12.http://13.40.95.69:8888/login?next=%2Ftree 퍼블릭 아이피로 들어가서 비번 입력하고 
+13. .py 저장 및  푸티 하나 더열어서 유비콘 실행 
+uvicorn main:app --host 0.0.0.0 --port 8080
+
+ 오라클1521 ,8888 인바인드 규칙 추가 
+ 
+주피터 노트북 포트 8888 , ai 서버 포트 8080도 열어줘야함 방화벽 설정 
+푸티는 ssh프로그램 
+
+ls -al  (list) 
+
+----------------------------------------------------------------------------------
+도커를 통해서 배포 
+local ,hub 
+1.프로젝트를 , jar 파일로 패키징 
+mvn cleam package 
+mvn.exe ,mvnw.exe 
+
+.jar 배포할때는 jdk21이 있는곳에 배포해야함 .
+jdk 를 가지고 잇는 컨테이너를 만들고 거기 안에서 돌려햐함 
+
+
+
+도커 데스크 탑을 설치하면 docker --version ,docker-compose --version 
+
+docker build -t spring-web:1.0 .
+
+docker images 
+
+docker run -d -p 80:80 spring-web: 1.0  컨테이너 실행 (백그라운드 실행 )
+
+
+도커 허브에 올려졌으면  인스턴스에서 도커 설치 
+푸티로 해야함
+
+
+
+
+R: 4 W 2 X 1  =7  
