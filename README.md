@@ -1,5 +1,125 @@
-zip -d <jar file name>.jar META-INF/*.RSA META-INF/*.DSA META-INF/*.SF
+```
+war, jar 파일 만들었으면 도커 빌드
+docker build -t fitizen:1.0 .
+docker images 생성된 이미지 확인
+docker login
+docker tag fitizen:1.0 myusername/fitizen:1.0  
 
+
+
+
+
+
+<강사 코드>>
+프로젝트를 jar 파일로 패키징하기
+
+프로젝트 루트 디렉토리로 CMD을 통해 이동
+mvnw clean package
+https://www.jetbrains.com/help/idea/compiling-applications.html#package_into_jar
+
+target 디렉토리에 생성된 jar 파일 확인
+이름변경 예) spring-web.jar
+
+생성된 jar 파일 실행해보기
+java -jar spring-web.jar
+
+호스트 시스템의 환경변수 등 jar 파일에 포함할 수 없는 값을 사용하면 jar 파일을 실행하는 중에 오류 발생함
+오류 메시지에는 오류의 원인을 기록한 파일의 위치가 포함되어 있으므로 참조하여 오류의 발생 원인 해소 가능
+환경변수의 값을 사용하는 대신에 application.properties 를 사용하는 방식으로 전환
+
+application.properties에 선언
+ - app.name="SpringWeb"
+클래스에서 위의 선언된 값 사용, 변수선언 위에 @Value 사용
+ - @Value("${app.name}") String appName 형식으로 전환
+
+Docker Desktop 설치
+ - https://docs.docker.com/desktop/setup/install/windows-install/
+ - Docker Hub 사이트(https://hub.docker.com/)에서 회원가입
+
+ - Docker Desktop이 실행 중일 때 docker 명령어를 사용할 수 있음
+ - Docker 컨테이너는 일종의 가상화 소프트웨어이지만 OS를 포함하지는 않음
+ - VMWare 와 비교해보면 이해가 쉬움
+ - docker --version
+ - docker-compose --version
+
+docker 명령어를 사용하여 배포할 프로젝트를 docker 이미지로 생성
+docker 명령어를 사용하여 생성된 이미지를 로컬 시스템에서 실행했을 때 문제가 없는지 확인
+
+dockerfile의 예
+FROM openjdk:21-jdk-slim   # FROM openjdk:17-jdk  FROM openjdk:21-jdk-alpine, FROM openjdk:21-jdk-slim
+WORKDIR /app
+COPY spring-web.jar spring-web.jar
+ENTRYPOINT ["java", "-jar", "/app/spring-web.jar"]
+
+도커 이미지 생성
+docker build -t spring-web:1.0 .   <- 현재 디렉토리(.)에서 dockerfile를 찾아 빌드작업 수행
+docker images
+docker run -d -p 80:80 spring-web:1.0
+docker ps                   : 컨테이너가 실행 중이면 웹브라우저에서 http://localhost으로 접속
+docker stop <컨테이너 아이디>
+docker container prune          <- 중지된 컨테이너 삭제
+docker rmi <IMAGE ID>         <- 이미지 삭제
+docker rmi -f <IMAGE ID>      <- 이미지 강제삭제
+
+Docker에서 Volume을 설정하는 예
+docker run -d -p 80:80 -v $(pwd)/static:/static spring-web
+
+docker login -u cwiskykim@gmail.com
+Password:
+Login Success
+
+docker images
+Docker hub의 형식에 맞춤(Tagging)
+docker tag <이미지이름> cwisky/spring-web:1.0
+docker images
+
+Docker hub에 업로드
+docker push cwisky/spring-web:1.0
+
+Docker hub에 업로드된 이미지 확인
+ Docker Desktop > Images > Hub
+
+
+Docker Desktop
+ - docker 명령어를 사용하기 위해서 설치
+ - 실행 중일 때만 docker 명령어를 사용할 수 있다
+ - 배포할 애플리케이션을 docker 이미지로 생성
+ - docker 명령어를 사용하여 docker hub에 도커 이미지를 업로드
+ - AWS EC2 인스턴스에서 docker 명령어를 사용하여 docker hub에 등록된 이미지를 다운로드
+ - AWS EC2에 다운로드된 이미지를 docker 명령으로 실행
+```
+
+
+```sql
+- war
+./mvnw clean package -DskipTests
+docker build -t fitizen:1.0 .
+이미지 파일 업로드 확인 
+docker images
+docker logs c9c6067f29f0
+docker exec -it c9c6067f29f0 ls /app/upload
+docker run -d -p 80:80 fitizen:1.0
+docker rmi <이미지 아이디 >
+```
+-----------
+zip -d <jar file name>.jar META-INF/*.RSA META-INF/*.DSA META-INF/*.SF
+docker run -d -p 80:80 --name spring-web-container spring-web:1.2 -- 백그라운드 실행 
+
+docker build -t fitizen:1.0 . ->  war 파일 빌드
+ docker logs c9c6067f29f0 -> 스프링 로고 보는법  저거 아이디는 도커 ps 에서 확인 
+
+docker tag <이미지 어아다>   도커 아이디/이미지 이름:버전 엔터  이미지 이름 바꾼거 똑같이 생성 및 
+
+hub에 올리기 
+
+docker login -u 이메일
+페스워드 입력 : 
+로그인 성공 
+docker push   도커 아이디/이미지 이름:버전 엔터
+
+docker stop
+
+허브 -> view 리파지토리스  해당된거 클릭  밑에  설정  리파지토리 세팅스 클릭 퍼블릭을 ㅗ변경 
 --------
 
 
