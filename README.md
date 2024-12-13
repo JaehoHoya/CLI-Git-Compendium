@@ -4,11 +4,13 @@ docker build -t fitizen:1.0 .
 docker images 생성된 이미지 확인
 docker login
 docker tag fitizen:1.0 myusername/fitizen:1.0  
+도커 푸시 
+docker push [DockerHub_Username]/fitizen:1.0
 
-
-
-
-
+Docker hub에 업로드된 이미지 확인
+ Docker Desktop > Images > Hub
+도커에서 퍼블릭으로 변경하기 view in hub  ->rapagitory
+그다음은 퓨티 인스턴스 접근하여  실행 
 
 <강사 코드>>
 프로젝트를 jar 파일로 패키징하기
