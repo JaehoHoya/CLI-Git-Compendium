@@ -12,7 +12,10 @@ Docker hub에 업로드된 이미지 확인
 도커에서 퍼블릭으로 변경하기 view in hub  ->rapagitory
 그다음은 퓨티 인스턴스 접근하여  실행 
 푸티에서 docker pull --platform linux/arm64 jaehohoya/fitizen:1.0
-먁북에서 한거라 ..시발 이렇게 해야하네 
+먁북에서 한거라 ..시발 이렇게 해야하네
+docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+docker run -d --platform linux/arm64 -p 80:80 jaehohoya/fitizen:1.0
+
 <강사 코드>>
 프로젝트를 jar 파일로 패키징하기
 
