@@ -1,3 +1,93 @@
+```sql
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name fitizen.store www.fitizen.store;
+
+    # Let's Encrypt 인증을 위한 설정
+    location /.well-known/acme-challenge/ {
+        root /var/www/html;
+    }
+
+    # HTTP -> HTTPS 리디렉션
+    return 301 https://$host$request_uri;
+}
+# HTTPS 요청 처리 (443 포트)
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl ipv6only=on;
+
+    server_name fitizen.store www.fitizen.store;
+
+    # SSL 인증서 설정
+    ssl_certificate /etc/letsencrypt/live/fitizen.store/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/fitizen.store/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+ # Chat WebSocket
+    location /chat {
+        proxy_pass http://localhost:8080/chat;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+    }
+
+    # Trainer Chat WebSocket
+    location /tChat {
+        proxy_pass http://localhost:8080/tChat;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+    }
+
+    # Alarm WebSocket
+    location /alarm {
+        proxy_pass http://localhost:8080/alarm;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+    }
+ # Spring 애플리케이션 리버스 프록시 설정
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+
+server {
+    if ($host = www.fitizen.store) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = fitizen.store) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    #listen 80 default_server;
+    #listen [::]:80 default_server;
+
+    server_name fitizen.store www.fitizen.store;
+    return 404; # managed by Certbot
+
+
+
+
+}
+
+```
+
+
 ```
 ** AWS에 gabia에서 구매한 도메인 설정하기 **
 Route 53 서비스로 이동 > 호스팅 영역 생성 > 시작하기 > 호스팅 영역 생성 > 시작하기 > 도메인 이름:입력 > 퍼블릭 호스팅 영역 선택 > 호스팅 영역 생성 > 이렇게 생성된 호스팅 영역에는 이미지 2개의 레코드가 포함되어 있음 추가로 A 타입 레코드를 1개 생성함(아래 참조) 레코드 생성 > 레코드 유형: A > 값:연결할 AWS 서비스의 퍼블릭 IP 주소를 입력 > 레코드 생성 www 가 포함된 레코드를 생성하려면 한개의 레코드를 더 생성한다(아래 참조) 레코드 생성 > 레코드 이름(subdomain):www > 레코드 유형: A > 값:연결할 AWS 서비스의 퍼블릭 IP 주소를 입력 > 레코드 생성
