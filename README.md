@@ -1,5 +1,42 @@
 ```sql
 server {
+    listen 443 ssl;
+    server_name fitizen.store;
+
+    ssl_certificate /path/to/certificate.crt;
+    ssl_certificate_key /path/to/private.key;
+
+    # Chat WebSocket
+    location /chat {
+        proxy_pass http://localhost:8080/chat;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+    }
+
+    # Trainer Chat WebSocket
+    location /tChat {
+        proxy_pass http://localhost:8080/tChat;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+    }
+
+    # Alarm WebSocket
+    location /alarm {
+        proxy_pass http://localhost:8080/alarm;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+    }
+}
+
+```
+```sql
+server {
     listen 80 default_server;
     listen [::]:80 default_server;
 
