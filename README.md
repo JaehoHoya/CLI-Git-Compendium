@@ -392,7 +392,7 @@ http://localhost:11434
 Ollama run … : 콘솔에서 모델과 대화 가능
 Ollama serve: 서버만 실행됨 ,콘솔 대화 불가 
 
-# 임시 도커 명령어 모음 ㅈ같은 경험 
+# 임시 도커 명령어 모음 은 경험 
 - colima start --memory 4 --arch x86_64 : 도커사용 , 도커 데스크탑 응용프로그램은 무거움, 
 - 오라클 이미지 다운
   - docker search oracle-11g-xe
